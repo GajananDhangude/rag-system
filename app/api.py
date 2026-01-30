@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import shutil
 import os
-import uuid
 import uvicorn
 
 from app.chunking import ingest_file
@@ -46,9 +45,15 @@ def upload_document(file: UploadFile = File(...)):
     if ext not in [".pdf", ".txt", ".docx"]:
         raise HTTPException(status_code=400, detail="Unsupported file type")
 
-    # Save file
-    doc_id = str(uuid.uuid4())
-    save_path = os.path.join(UPLOAD_DIR, f"{doc_id}_{file.filename}")
+
+    save_path = os.path.join(UPLOAD_DIR, f"{file.filename}")
+
+    if os.path.exists(save_path):
+        yield "The file already exists in our local storage"
+    
+    else:
+        yield "Path is Clear . Saving File."
+
 
     with open(save_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
