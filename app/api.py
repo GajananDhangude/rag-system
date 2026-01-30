@@ -80,7 +80,8 @@ def query_rag_api(req: QueryRequest):
     answer = query_rag(req.question, target_source)
 
     return {
-        "answer": answer,
+        "answer": answer['responce'],
+        # "context_used":answer['contexts'],
         "source_used": target_source
     }
 
@@ -92,5 +93,5 @@ if __name__ =="__main__":
         "app.api:app", 
         host="127.0.0.1", 
         port=8000, 
-        reload=True
+        reload=False
     )

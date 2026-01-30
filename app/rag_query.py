@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0.1)
+llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0)
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
@@ -26,16 +26,15 @@ def query_rag(quert_text:str , source:str):
         }
     )
 
+    # retrieved_docs = retriever.invoke(quert_text)
+
 
     prompt = ChatPromptTemplate.from_template("""
 You are an AI assistant answering based ONLY on the provided context.
-
 Context:
 {context}
-
 Question:
 {question}
-
 Answer clearly and concisely:
 """)
     
@@ -53,5 +52,8 @@ Answer clearly and concisely:
 
     responce = rag_chain.invoke(quert_text)
 
-    return responce
+    return {
+        "responce":responce,
+        # "contexts":[doc.page_content for doc in retrieved_docs],
+    }
 

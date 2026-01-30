@@ -10,7 +10,7 @@ def ingest_file(file_path):
     document = process_docs(file_path)
 
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=700,
+        chunk_size=800,
         chunk_overlap=60
     )
 
